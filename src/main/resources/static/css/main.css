@@ -1,0 +1,169 @@
+* Importing Google Fonts */
+
+/* Custom Styling for Hero Section */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+/* Title Styling */
+.hero-title {
+    font-weight: bold; /* Ensures title is bold */
+    color: #fff; /* White color for better contrast on background */
+    margin-top: 20px; /* Pushes the title slightly lower */
+    font-size: 3rem; /* Adjust font size */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Optional: Adds a subtle shadow for better visibility */
+}
+
+/* Button Styling */
+.hero-section .btn-primary {
+    background-color: #ff6347; /* Vibrant red */
+    border-color: #ff6347;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 30px; /* Rounded button */
+    text-transform: uppercase;
+}
+
+.hero-section .btn-primary:hover {
+    background-color: #e55347; /* Darker red on hover */
+    border-color: #e55347;
+}
+
+/* Styling the header container */
+header {
+    background-color: #f8f9fa;  /* Light background */
+    padding: 1rem 0;  /* Padding for top and bottom */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Adding a light shadow for a modern look */
+}
+
+/* Styling the logo */
+header .logo a {
+    font-family: 'Poppins', sans-serif;  /* Using Poppins font for the logo */
+    font-size: 2.5rem;  /* Larger font size for the logo */
+    font-weight: 600;  /* Semi-bold font for emphasis */
+    color: transparent;  /* Making the text transparent to show gradient */
+    background-image: linear-gradient(to right, #f05a28, #ee3f7f);  /* Vibrant gradient */
+    -webkit-background-clip: text;  /* Apply gradient only to the text */
+    background-clip: text;  /* Gradient for text */
+    text-decoration: none;  /* Remove underline */
+    letter-spacing: 3px;  /* Spacing between letters for better readability */
+    position: relative;  /* For text shadow effect */
+    transition: color 0.3s ease, transform 0.3s ease;  /* Smooth color transition and transform */
+}
+
+/* Hover effect for the logo */
+header .logo a:hover {
+    transform: scale(1.1);  /* Slight scale-up effect on hover */
+    color: #333;  /* Default color on hover */
+    background-image: none;  /* Remove the gradient on hover */
+}
+
+/* Styling navigation links */
+header nav {
+    font-family: 'Roboto', sans-serif;  /* Using Roboto font for navigation */
+    font-size: 1.1rem;  /* Slightly larger font size for navigation */
+}
+
+header nav .nav-link {
+    color: #555;  /* Dark grey for links */
+    text-decoration: none;  /* Remove underline */
+    padding: 0.5rem 1rem;  /* Add padding to links for clickable area */
+    border-radius: 0.25rem;  /* Rounded corners for links */
+    transition: background-color 0.3s, color 0.3s;  /* Smooth transition for hover effects */
+}
+
+/* Hover effect for nav links */
+header nav .nav-link:hover {
+    background-color: #007bff;  /* Blue background on hover */
+    color: #fff;  /* White text on hover */
+}
+
+/* Make sure the nav container items align properly on smaller screens */
+@media (max-width: 768px) {
+    header .container-lg {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    header nav {
+        margin-top: 1rem;
+    }
+}
+/* General styles for the nav item */
+.nav-item.user-dropdown {
+    position: relative;
+}
+
+/* Profile image styles */
+.user-dropdown .img-xs {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ddd; /* Optional border for styling */
+}
+
+/* Dropdown Menu styles */
+.user-dropdown .dropdown-menu {
+    min-width: 200px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    font-family: 'Nunito', sans-serif;
+}
+
+/* Dropdown Header styles */
+.user-dropdown .dropdown-header {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+/* Dropdown Header Profile Image */
+.user-dropdown .dropdown-header img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+/* User Name */
+.user-dropdown .dropdown-header .font-weight-semibold {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* User Email */
+.user-dropdown .dropdown-header .fw-light {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 0;
+}
+
+/* Dropdown Item styles */
+.user-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.user-dropdown .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #0056b3;
+}
+
+/* Icon styles within dropdown items */
+.user-dropdown .dropdown-item-icon {
+    font-size: 18px;
+    margin-right: 10px;
+}

@@ -1,0 +1,153 @@
+/* General Styles */
+body {
+    font-family: 'Nunito', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f8f9fc; /* Light background color */
+    margin: 0;
+}
+
+/* Container */
+.container {
+    width: 75vw; /* Slightly wider container */
+    max-width: 500px;
+    height: 90vh; /* Full-height container */
+    border-radius: 8px;
+    padding: 2rem; /* Padding to keep content from touching edges */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+/* Card Styles */
+.card {
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+/* Form Styles */
+.user {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Space between inputs */
+}
+
+.form-control-user {
+    width: 45vw;
+    height: calc(100% - 2rem); /* Full height minus padding */
+    max-width: 900px; /* Increased width for a slightly longer text box */
+    border-radius: 6px;
+    border: 1px solid #d1d3e2;
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: #6e707e;
+    background-color: #ffffff;
+    transition: border-color 0.3s;
+    box-sizing: border-box; /* Ensures padding is within total height */
+}
+
+.form-control-user:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 8px rgba(78, 115, 223, 0.25);
+}
+
+/* Button Styles */
+.btn-user {
+    width: 100%;
+    max-width: 650px; /* Increased width for the button */
+    border-radius: 6px;
+    font-size: 1.2rem;
+    padding: 0.75rem;
+    background-color:#ff6347;
+    color: #fff;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    align-self: center; /* Centers the button horizontally */
+}
+
+.btn-user:hover {
+    background-color: #2e59d9;
+    transform: translateY(-2px);
+}
+
+/* Link Styles */
+a.small {
+    color: #4e73df;
+    font-weight: 600;
+ /* Custom styling for container */
+.container-sm {
+    max-width: 500px; /* Adjust the width as needed */
+}
+
+/* Card Styling Adjustments */
+.card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Form Styling */
+.form-control-user {
+    border-radius: 10px;
+    height: 50px;
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+/* Vibrant Submit Button */
+.btn-vibrant {
+    background: linear-gradient(45deg, #ff6a00, #ee0979);
+    color: white;
+    border-radius: 25px;
+    font-weight: bold;
+    padding: 15px;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 0 6px 15px rgba(255, 105, 180, 0.3);
+}
+
+.btn-vibrant:hover {
+    background: linear-gradient(45deg, #ee0979, #ff6a00);
+    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.4);
+}
+
+
+
+a.small:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .container-sm {
+        max-width: 400px; /* Even smaller on mobile */
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .form-control-user {
+        font-size: 14px;
+    }
+}
+
+

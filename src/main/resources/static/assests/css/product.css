@@ -1,0 +1,197 @@
+/* General layout */
+#content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers the content vertically */
+    align-items: center; /* Centers the content horizontally */
+    height: 100vh; /* Full height of the viewport */
+}
+
+.container-fluid {
+    margin-top: 20px;
+    max-width: 800px; /* Container width adjusted for center alignment */
+    padding: 0 15px; /* Padding for responsiveness */
+}
+
+/* Vibrant color scheme */
+.card {
+    margin-bottom: 20px;
+    border: 1px solid #ff6347; /* Border color */
+    border-radius: 10px;
+}
+
+.card-header {
+    background-color: #ff6347; /* Vibrant blue for the header */
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    padding: 15px;
+}
+
+.card-body {
+    background-color: #fff9f2; /* Light vibrant background */
+    padding: 30px;
+    border-radius: 10px;
+}
+
+/* Form styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #007bff; /* Vibrant label color */
+}
+
+.form-control {
+    width: 100%; /* Full width for form controls */
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #ff6347; /* Vibrant focus color */
+    box-shadow: 0 0 5px rgba(255, 99, 71, 0.5);
+}
+
+/* Single-column layout */
+.row.mb-3 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Increased gap between form elements */
+}
+
+.row .col-md-6 {
+    flex: 1;
+    min-width: 100%; /* Full width in single-column layout */
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #ff6347; /* Vibrant blue primary button */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #007bff, #ff6347); /* Gradient hover effect */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.btn-warning {
+    background-color: red; /* Vibrant red-warning button color */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(45deg, #ff6347, #e55347); /* Gradient hover effect */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Table styling */
+.table-responsive {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+
+.table th,
+.table td {
+    text-align: center;
+    padding: 10px;
+}
+
+.table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.table img {
+    max-height: 100px;
+    object-fit: cover;
+}
+
+/* Modal styling */
+.modal-content {
+    border-radius: 5px;
+}
+
+.modal-header {
+    background-color: #ff6347; /* Vibrant color for modal header */
+    color: white;
+}
+
+.modal-body {
+    font-size: 16px;
+}
+
+.modal-footer button {
+    background-color: #ff6347;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.modal-footer button:hover {
+    background-color: #e55347;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .form-control {
+        font-size: 14px;
+    }
+
+    .btn-primary, .btn-warning {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+
+    .table th, .table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .table img {
+        max-height: 80px;
+    }
+
+    /* Adjust form layout for smaller screens */
+    .row.mb-3 {
+        flex-direction: column;
+    }
+
+    .row .col-md-6 {
+        min-width: 100%;
+    }
+
+    /* Adjust card margins */
+    .card {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+}
