@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap');
+
+body {
+    background-color: #f9f9f9 !important;
+    font-family: 'Quicksand', sans-serif !important;
+    color: #212529;
+    font-size: 1.7rem;
+}
+
+/* Header inside container */
+.container h2 {
+    font-size: 2.4rem !important;
+    font-weight: 700;
+    color: #dc3545;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 2px rgba(220, 53, 69, 0.2);
+}
+
+/* Card content styling */
+.card,
+.card-body,
+.card-header,
+.card-footer,
+.card-title,
+.card-text,
+.card-subtitle {
+    font-size: 1.6rem !important;
+    font-weight: 500;
+    font-family: 'Quicksand', sans-serif !important;
+    color: #343a40;
+}
+
+/* Red header */
+.card-header.bg-danger {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Red border cards */
+.card.border-danger {
+    border: 2px solid #dc3545 !important;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.2);
+}
+
+/* Stylish link buttons */
+.btn-link {
+    font-size: 1.8rem !important;
+    font-weight: bold;
+    font-family: 'Quicksand', sans-serif !important;
+    color: #dc3545 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-link:hover {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    text-decoration: underline !important;
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+/* Soft red badge */
+.badge-light {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    font-size: 1.2rem !important;
+    padding: 0.4rem 0.8rem !important;
+    border-radius: 6px;
+}

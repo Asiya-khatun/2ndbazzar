@@ -24,6 +24,7 @@ import com.asiya.projectbazar.entity.Cart;
 import com.asiya.projectbazar.entity.Product;
 import com.asiya.projectbazar.entity.User;
 import com.asiya.projectbazar.service.CartService;
+import com.asiya.projectbazar.service.MailService;
 import com.asiya.projectbazar.service.OrderService;
 import com.asiya.projectbazar.service.ProductService;
 import com.asiya.projectbazar.service.UserService;
@@ -46,6 +47,9 @@ public class CartController {
 	
 	@Autowired
 	private OrderedProductDao orderedProductDao;
+	
+	@Autowired
+	private MailService mailService;
 
 	
 	
@@ -112,34 +116,29 @@ public class CartController {
 
 	@PostMapping("/update/{id}")
 	public String updateCart(@PathVariable int id, @ModelAttribute Cart cart, RedirectAttributes redirectAttributes) {
-	    // Retrieve the cart from the database by ID
-		
-			  
-		    Optional<Cart> carts = cartService.getCartById(id);
+			  		    Optional<Cart> carts = cartService.getCartById(id);
 
 	    if (carts.isPresent()) {
 	        Cart existingCart = carts.get();
 
 	        if (existingCart.getProduct() != null) {
-	            int availableQuantity = existingCart.getProduct().getQuantity();  // Get available quantity of the product
+	            int availableQuantity = existingCart.getProduct().getQuantity();  
 
 	            if (cart.getQuantity() <= availableQuantity) {
 	                existingCart.setQuantity(cart.getQuantity());
 	                cartService.updateCart(existingCart);  
 	                return "redirect:/user/cart/show/" +existingCart.getUser().getId();
 	            } else {
-//	                redirectAttributes.addAttribute("error", "quantityExceeded");
 	            	redirectAttributes.addFlashAttribute("QuantityExceed","Added more carts then product");
 	                return "redirect:/user/cart/show/" +existingCart.getUser().getId();
 	            }
 	        } else {
+	        	
 	        	redirectAttributes.addFlashAttribute("NullProduct","Quantity out of stock");
-//	            redirectAttributes.addAttribute("error", "productNull");
                 return "redirect:/user/cart/show/" +existingCart.getUser().getId();
 	        }
 	    } else {
 	    	redirectAttributes.addFlashAttribute("noCartFound", "Cart Not Found");
-//	        redirectAttributes.addAttribute("error", "cartNotFound");
 	        return "redirect:/user/cart/show";  
 	    }
 	}
@@ -183,9 +182,4 @@ public class CartController {
 	        return "redirect:/user/cart/show/"+user.getId();
 	    }
 	}
-
-	
-
-
-
 }

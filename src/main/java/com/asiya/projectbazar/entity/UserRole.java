@@ -62,12 +62,4 @@ public class UserRole  implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
-	
-	
-	
-	
-	
-
 }

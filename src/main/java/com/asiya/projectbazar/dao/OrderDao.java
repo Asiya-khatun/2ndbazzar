@@ -15,6 +15,7 @@ public interface OrderDao extends JpaRepository<OrderProduct,Integer> {
 	public List<OrderProduct> findByUser(User user);
 
 	public List<OrderProduct> findById(int id);
+	
 
 	
 	}

@@ -9,6 +9,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.asiya.projectbazar.dao.UserDao;
 import com.asiya.projectbazar.entity.User;
+import com.asiya.projectbazar.entity.UserRole;
 
 import jakarta.transaction.Transactional;
 
@@ -69,7 +70,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User updateUserProfile(User user) {
-		// TODO Auto-generated method stub
 		User userd= userDao.findById(user.getId());
 //		
 		if(!ObjectUtils.isEmpty(userd))
@@ -79,13 +79,10 @@ public class UserServiceImpl implements UserService {
 			userd.setDob(user.getDob());
 			userd.setPhone(user.getPhone());
 			userd.setUsername(user.getUsername());
+			userd.setEmail(user.getEmail());
 			userd=userDao.save(userd);
-			
 		}
-		return userd;
-		
-		//for null pointer handling we user= Optional tag 
-		
+		return userd;		
 	}
 
 
@@ -103,6 +100,15 @@ public class UserServiceImpl implements UserService {
 		userDao.save(user);
 		
 	}
+
+
+
+	@Override
+	public List<User> getByUserRole(String role) {
+		// TODO Auto-generated method stub
+		return userDao.findByUserRole_role(role);
+	}
+
 
 
 

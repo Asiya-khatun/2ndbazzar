@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 
 <c:set var="cp" value="${pageContext.request.contextPath}" />
 
@@ -8,178 +10,168 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>User Management</title>
 
-    <!-- Custom fonts for this template-->
-    <link rel="stylesheet" href="${cp}/assests/vendors/feather/feather.css">
-    <link rel="stylesheet" href="${cp}/assests/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="${cp}/assests/vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="${cp}/assests/vendors/typicons/typicons.css">
-    <link rel="stylesheet" href="${cp}/assests/vendors/simple-line-icons/css/simple-line-icons.css">
-    <link rel="stylesheet" href="${cp}/assests/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="${cp}/assests/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
-    <link rel="stylesheet" href="${cp}/assests/js/select.dataTables.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <link rel="stylesheet" href="${cp}/assests/css/vertical-layout-light/style.css">
-    <!-- endinject -->
-    <link rel="shortcut icon" href="${cp}/assests/images/favicon.png" />
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px 30px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-avatar {
+            width: 70px;
+            height: 70px;
+            background: #d32f2f;
+            color: white;
+            font-weight: 700;
+            font-size: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #b71c1c;
+            margin-bottom: 5px;
+        }
+
+        .user-address {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        .user-contact {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge-phone {
+            background-color: #ef5350;
+            color: white;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .badge-email {
+            background-color: #ab47bc;
+            color: white;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Container */
+        .container-custom {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        h1.page-title {
+            text-align: center;
+            color: #b71c1c;
+            font-weight: 900;
+            margin-bottom: 40px;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Segoe UI Black', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
 </head>
 
-<body id="page-top">
+<body>
+<%@ include file="navbar.jsp" %>
+    <div class="container-custom">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+<h1 class="page-title">
+  <i class="fa-solid fa-users"></i> User Management
+</h1>
 
-        <!-- side bar  -->
-        <%@ include file="../admin/navbar.jsp" %>
-
-        <!-- partial -->
-        <div class="container-fluid page-body-wrapper">
-            <!-- partial:partials/_settings-panel.html -->
-            <%@ include file="../admin/sidebar.jsp" %>
-            <!-- Content Wrapper -->
-            <div id="content-wrapper" class="d-flex flex-column">
-
-                <!-- Main Content -->
-                <div id="content">
-
-                    <!-- Topbar -->
-                    <!-- top bar end -->
-
-                    <div class="container-fluid">
-                        <div></div>
-
-                        <div class="row">
-
-                            <div class="row" id="category_data">
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-heading">
-                                            User Lists
-                                            <div class="card-body">
-                                                <table class="table table-responsive table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>User Id</th>
-                                                            <th>Name</th>
-                                                            <th>Address</th>
-                                                            <th>Phone</th>
-                                                            <th>Email</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:choose>
-                                                            <c:when test="${empty user_list}">
-                                                                <tr>
-                                                                    <td colspan="6">No user found</td>
-                                                                </tr>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <c:forEach items="${user_list}" var="user">
-                                                                    <tr>
-                                                                        <td>${user.id}</td>
-                                                                        <td>${user.name}</td>
-                                                                        <td>${user.address}</td>
-                                                                        <td>${user.phone}</td>
-                                                                        <td>${user.email}</td>
-                                                                        <td>
-                                                                            
-                                                                        </td>
-                                                                    </tr>
-                                                                </c:forEach>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+        <c:choose>
+            <c:when test="${empty user_list}">
+                <div class="alert alert-warning text-center" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i> No users found.
+                </div>
+            </c:when>
+            <c:otherwise>
+                <c:forEach items="${user_list}" var="user">
+                    <div class="user-card d-flex align-items-center">
+                   
+   <!-- Avatar with initials -->
+                        <div class="user-avatar">
+                            <c:out value="${fn:substring(user.name, 0, 2)}" />
+                        </div>
+                        
+                        <div class="user-info">
+<div class="user-name"><i class="fas fa-user"></i> ${user.username}</div>
+                            <div class="user-address"><i class="fas fa-map-marker-alt"></i>
+                            ${user.address}</div>
+                            <div class="user-contact">
+                                <span class="badge-phone"><i class="fas fa-phone"></i> ${user.phone}</span>
+                                <span class="badge-email"><i class="fas fa-envelope"></i> ${user.email}</span>
+								<span class="badge-dob"><i class="fas fa-birthday-cake"></i> ${user.dob}</span>
+                                
                             </div>
                         </div>
                     </div>
-                    <!-- Footer -->
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
 
-                </div>
-                <!-- End of Content Wrapper -->
+    </div>
 
-            </div>
-            <!-- End of Page Wrapper -->
+    <!-- Bootstrap 5 JS Bundle (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-            <!-- Scroll to Top Button-->
-            <a class="scroll-to-top rounded" href="#page-top"> <i class="fas fa-angle-up"></i></a>
-
-            <!-- Logout Modal-->
-            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Confirm Delete Category</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post">
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                                <label for="recipient-name" class="col-form-label">Are you sure to delete this category?</label>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-danger">Confirm delete</button>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bootstrap core JavaScript-->
-            <script src="${cp}/assests/vendor/jquery/jquery.min.js"></script>
-            <script src="${cp}/assests/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-            <!-- Core plugins JavaScript-->
-            <script src="${cp}/assests/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-            <!-- Custom scripts for all pages-->
-            <script src="${cp}/assests/vendors/js/vendor.bundle.base.js"></script>
-            <!-- endinject -->
-            <!-- Plugin js for this page -->
-            <script src="${cp}/assests/vendors/chart.js/Chart.min.js"></script>
-            <script src="${cp}/assests/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-            <script src="${cp}/assests/vendors/progressbar.js/progressbar.min.js"></script>
-
-            <!-- End plugin js for this page -->
-            <!-- inject:js -->
-            <script src="${cp}/assests/js/off-canvas.js"></script>
-            <script src="${cp}/assests/js/hoverable-collapse.js"></script>
-            <script src="${cp}/assests/js/template.js"></script>
-            <script src="${cp}/assests/js/settings.js"></script>
-            <script src="${cp}/assests/js/todolist.js"></script>
-            <!-- endinject -->
-            <!-- Custom js for this page-->
-            <script src="${cp}/assests/js/dashboard.js"></script>
-            <script src="${cp}/assests/js/Chart.roundedBarCharts.js"></script>
-
-            <script type="text/javascript">
-                $('#deleteModal').on('show.bs.modal', function(event) {
-                    var button = $(event.relatedTarget);
-                    var id = button.data('whatever');
-
-                    var modal = $(this);
-                    modal.find('.modal-title').text('Delete category with id ' + id);
-                    modal.find('form').attr('action', `${cp}/admin/category/delete/` + id);
-                });
-            </script>
 </body>
 
 </html>

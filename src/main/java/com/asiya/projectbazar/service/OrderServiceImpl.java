@@ -1,12 +1,14 @@
 package com.asiya.projectbazar.service;
 
 import java.security.Identity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asiya.projectbazar.algorithms.OrderHistory;
 import com.asiya.projectbazar.dao.OrderDao;
 import com.asiya.projectbazar.dao.OrderedProductDao;
 import com.asiya.projectbazar.dao.ProductDao;
@@ -82,6 +84,36 @@ public class OrderServiceImpl implements OrderService{
 	public List<OrderedProducts> getMyOrdersByUser(User productOwner) {
 		// TODO Auto-generated method stub
 		return orderedProductDao.findOrdersByProductOwner(productOwner);
+	}
+
+	@Override
+	public List<OrderHistory> getUserOrderProducts(User user) {
+	    // Fetch all orders for the given user
+	    List<OrderProduct> orders = orderDao.findByUser(user);
+
+	 // Java
+	 // Convert each OrderedProduct into an OrderHistory
+	 List<OrderHistory> userOrders = new ArrayList<>();
+	 for (OrderProduct order : orders) {
+	     if (order.getOrderedProducts() == null) continue;
+	     for (OrderedProducts op : order.getOrderedProducts()) {
+	         Product product = op.getProduct();
+	         if (product != null) {
+	             userOrders.add(new OrderHistory(
+	                 product.getCategory(),
+	                 product.getDescription(),
+	                 user, // buyer
+	                 product.getUser() != null ? product.getUser().getId() : null, // seller
+	                 1, // label for training
+	                 product.getImageName(),
+	                 product.getName(),
+	                 product.getId() // NEW: ensure purchased product id is recorded
+	             ));
+	         }
+	     }
+	 }
+
+	    return userOrders;
 	}
 
 	

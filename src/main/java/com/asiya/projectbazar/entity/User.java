@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -52,8 +53,9 @@ public class User implements Serializable{
 
 	
 	
-	@NotEmpty(message="Username is required")
-	@Size(min=2, max=15, message="The username should be upto 15 characters long")
+//	@NotEmpty(message="Username is required")
+//	@Size(min=2, max=15, message="The username should be upto 15 characters long")
+	@Column(name="username",unique = true)
 	private String username;
 	
 	@NotEmpty(message="Address is required")
@@ -70,6 +72,10 @@ public class User implements Serializable{
 	
 	@Transient
 	private String authority;
+	
+	@Column(name="methods")
+	private String provider;
+	
 	
 @OneToOne(mappedBy="user",cascade=CascadeType.ALL,fetch=FetchType.EAGER,orphanRemoval = true)
 private UserRole userRole;
@@ -88,7 +94,7 @@ public User() {
 }
 public User(int id, String name, String email, String phone, String username, String address, LocalDate dob,
 		String password, String enable, String authority, UserRole userRole, 
-		String imageName,List<Cart> cartList,List<OrderProduct> orderProducts) {
+		String imageName,List<Cart> cartList,List<OrderProduct> orderProducts,String provider) {
 	super();
 	this.name = name;
 	this.email = email;
@@ -102,6 +108,8 @@ public User(int id, String name, String email, String phone, String username, St
 	this.userRole = userRole;
 	this.cartList=cartList;
 	this.orderProducts=orderProducts;
+	this.provider=provider;
+	
 
 }
 public int getId() {
@@ -191,15 +199,10 @@ public List<OrderProduct> getOrderProducts() {
 public void setOrderProducts(List<OrderProduct> orderProducts) {
 	this.orderProducts = orderProducts;
 }
-
-
-
-
-
-
-	
-	
-	
-	
-
+public String getProvider() {
+	return provider;
+}
+public void setProvider(String provider) {
+	this.provider = provider;
+}
 }

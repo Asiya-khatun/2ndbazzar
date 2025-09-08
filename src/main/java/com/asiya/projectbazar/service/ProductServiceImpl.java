@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.asiya.projectbazar.dao.ProductDao;
 import com.asiya.projectbazar.entity.Product;
+import com.asiya.projectbazar.enums.CategoryEnum;
 
 import jakarta.transaction.Transactional;
 
@@ -63,6 +64,11 @@ private ProductDao productDao;
 	public List<Product> getAllProductExceptLoggedInUser(int userID) {
 		// TODO Auto-generated method stub
 		return productDao.findAllExceptLoggedInUser(userID);
+	}
+	@Override
+	public List<Product> getByCategories(CategoryEnum categoryEnum,int userId) {
+		// TODO Auto-generated method stub
+		return productDao.findByCategoryAndUserIdNot(categoryEnum,userId);
 	}
 
 }

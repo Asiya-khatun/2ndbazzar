@@ -6,9 +6,13 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.asiya.projectbazar.enums.CategoryEnum;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,14 +48,12 @@ public class Product implements Serializable{
 	
 	private LocalDate addedDate;
 	
-	@ManyToOne
-	@JoinColumn(name="category_id")
-	private Category category;
+	@Enumerated(EnumType.STRING)
+	@Column(name="Category")
+	private CategoryEnum category;
 	
 	@Transient
 	private MultipartFile imageFile;
-	
-	
 	private String imageName;
 	
 	@OneToMany(mappedBy="product",cascade=CascadeType.ALL, orphanRemoval = true)
@@ -70,7 +72,7 @@ public class Product implements Serializable{
 	}
 
 	public Product(int id,String name, double price, int quantity, String description, LocalDate addedDate,
-			Category category, MultipartFile imageFile, String imageName, List<Cart> cartList, List<OrderedProducts> orderedProducts) {
+			 MultipartFile imageFile, String imageName, List<Cart> cartList, List<OrderedProducts> orderedProducts,CategoryEnum category) {
 		super();
 		this.id=id;
 		this.name = name;
@@ -78,11 +80,12 @@ public class Product implements Serializable{
 		this.quantity = quantity;
 		this.description = description;
 		this.addedDate = addedDate;
-		this.category = category;
+//		this.category = category;
 		this.imageFile = imageFile;
-		this.imageName = imageName;
+		this.imageName = imageName; 
 		this.cartList = cartList;
 		this.orderedProducts=orderedProducts;
+		this.category=category;
 		
 	}
 
@@ -135,14 +138,6 @@ public class Product implements Serializable{
 		this.addedDate = addedDate;
 	}
 
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
 	public MultipartFile getImageFile() {
 		return imageFile;
 	}
@@ -182,5 +177,14 @@ public class Product implements Serializable{
 	public void setOrderedProducts(List<OrderedProducts> orderedProducts) {
 		this.orderedProducts = orderedProducts;
 	}
+
+	public CategoryEnum getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryEnum category) {
+		this.category = category;
+	}
+	
 
 }

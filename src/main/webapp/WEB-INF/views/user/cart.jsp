@@ -1,279 +1,161 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="cp" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shopping Cart</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<link rel="stylesheet" href="${cp}/css/cart.css">
-<!-- Google Fonts -->
-<link
-	href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Poppins:wght@400;600&display=swap"
-	rel="stylesheet">
-
-<!-- Custom Styles -->
-<style>
-body {
-	font-family: 'Poppins', sans-serif;
-	background-color: #f8f9fa;
-	padding: 20px;
-}
-
-.cart-header h2 {
-	font-family: 'Lora', serif;
-	color: #fff;
-	background-color: #800080; /* Purple */
-	font-size: 2.5rem;
-	text-align: center;
-	padding: 20px;
-	border-radius: 10px;
-	text-transform: uppercase;
-}
-
-.cart-item {
-	background-color: #fff;
-	border-radius: 10px;
-	padding: 15px;
-	margin-bottom: 20px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	max-width: 800px;
-	margin: 0 auto;
-}
-
-.cart-item img {
-	width: 120px;
-	height: auto;
-	border-radius: 10px;
-}
-
-.cart-item-details {
-	flex-grow: 1;
-	padding-left: 20px;
-}
-
-.cart-item-details h5 {
-	font-family: 'Lora', serif;
-	color: #FF6F61; /* Soft Coral */
-	font-size: 1.5rem;
-}
-
-.cart-item-details p {
-	font-size: 1rem;
-	color: #34495e;
-	margin: 5px 0;
-}
-
-.button-container {
-	display: flex;
-	gap: 10px;
-}
-
-.btn-update, .remove-btn {
-	background-color: #FF6F61;
-	color: white;
-	border: none;
-	padding: 8px 15px;
-	border-radius: 5px;
-	cursor: pointer;
-	text-transform: uppercase;
-	font-size: 0.75rem;
-	width: 90px;
-}
-
-.btn-update:hover, .remove-btn:hover {
-	background-color: #ff4d3f;
-}
-
-.cart-total {
-	background-color: #fff;
-	border-radius: 10px;
-	padding: 15px;
-	margin-top: 30px;
-	text-align: center;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.cart-total h4 {
-	font-family: 'Lora', serif;
-	color: #2c3e50;
-	font-size: 2rem;
-}
-
-.form-container {
-	margin-top: 30px;
-	background-color: #fff;
-	border-radius: 10px;
-	padding: 10px;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.form-header {
-	font-family: 'Lora', serif;
-	font-size: 1.8rem;
-	color: #FF6F61;
-	text-align: center;
-	margin-bottom: 20px;
-}
-
-.d-flex a {
-	margin: 0 10px;
-}
-
-.d-flex img {
-	width: 100px;
-	height: auto;
-	border-radius: 10px;
-}
-
-.show-ordered-btn, .delete-all-btn {
-	background-color: #800080;
-	color: white;
-	padding: 10px 5px;
-	font-size: 1.50vh;
-	border-radius: 10px;
-	text-align: center;
-	text-decoration: none;
-	width: 200px;
-	text-transform: uppercase;
-}
-
-.show-ordered-btn:hover, .delete-all-btn:hover {
-	background-color: #6a006a;
-}
-
-.button-wrapper {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 20px;
-}
-
-.alert {
-	text-align: center;
-	margin-bottom: 15px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" type="text/css" href="${cp}/asset/css/.css">
+    <link rel="stylesheet" type="text/css" href="${cp}/asset/css/cart.css">
+  <link rel="stylesheet" type="text/css"href="${cp}/asset/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"href="${cp}/asset/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css"href="${cp}/asset/css/nouislider.min.css">
+<link rel="stylesheet" type="text/css" href="${cp}/asset/css/slick.css">
+<link rel="stylesheet" type="text/css"href="${cp}/asset/css/slick-theme.css">
+<link rel="stylesheet" type="text/css" href="${cp}/asset/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-	<%@ include file="../userhome.jsp"%>
 
-	<c:if test="${not empty param.error}">
-		<div class="alert alert-danger">Cart not found!</div>
-	</c:if>
+<%@ include file="navbar.jsp" %>
+  <div class="cart-container">
+    <div class="cart-header">
+<h1 class="cart-title">🛒 Cart Options</h1>
 
-	<div class="container">
-		<div class="cart-header">
-			<h2>My Cart List</h2>
-		</div>
-		<c:if test="${not empty deleteSuccess}">
-			<div class="alert alert-success">
-				${deleteSuccess}
-				<button type="button" class="btn-close" data-bs-dismiss="alert"
-					aria-label="Close"></button>
+    </div>
 
-			</div>
-		</c:if>
+    <!-- Alert messages -->
+    <c:if test="${not empty param.error}">
+      <div class="alert alert-danger">Cart not found!</div>
+    </c:if>
 
-		<c:if test="${not empty deleteOneSuccess}">
-			<div class="alert alert-success">
-				${deleteOneSuccess}
-				<button type="button" class="btn-close" data-bs-dismiss="alert"
-					aria-label="Close"></button>
+    <c:if test="${not empty deleteSuccess}">
+      <div class="alert alert-success alert-dismissible fade show">${deleteSuccess}</div>
+    </c:if>
 
-			</div>
-		</c:if>
+    <c:if test="${not empty deleteOneSuccess}">
+      <div class="alert alert-success alert-dismissible fade show">${deleteOneSuccess}</div>
+    </c:if>
 
-		<c:if test="${not empty errordelete}">
-			<div class="alert alert-success">
-				${errordelete}
-				<button type="button" class="btn-close" data-bs-dismiss="alert"
-					aria-label="Close"></button>
+    <c:if test="${not empty errordelete}">
+      <div class="alert alert-danger alert-dismissible fade show">${errordelete}</div>
+    </c:if>
 
-			</div>
-		</c:if>
-		<c:if test="${not empty NullProduct}">
-			<div class="alert alert-danger">${NullProduct}</div>
-		</c:if>
+    <c:if test="${not empty NullProduct}">
+      <div class="alert alert-danger">${NullProduct}</div>
+    </c:if>
 
-		<c:if test="${not empty noCartFound}">
-			<div class="alert alert-danger">${noCartFound}</div>
-		</c:if>
+    <!-- Empty Cart -->
+    <c:if test="${empty cartItems || cartItems.size() == 0}">
+      <div class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Start shopping to add items to your cart</p>
+        <a href="${cp}/user/product/allproducts/${user.id}" class="btn btn-primary mt-3">Browse Products</a>
+      </div>
+    </c:if>
 
-		<c:set var="totalPrice" value="0" />
-		<c:forEach items="${cartItems}" var="item" varStatus="status">
-			<div class="cart-item">
-				<img src="${cp}/product_image/${item.product.imageName}"
-					alt="Product Image">
-				<div class="cart-item-details">
-					<h5>${item.product.name}</h5>
-					<p>Category: ${item.product.category.name}</p>
-					<p>Price: Rs ${item.product.price}</p>
-					<p>Total Quantity: ${item.product.quantity}</p>
-					<p>Ordered Quantity: ${item.quantity}</p>
-					<c:if test="${not empty QuantityExceed}">
-						<div class="alert alert-warning">${QuantityExceed}</div>
-					</c:if>
-				</div>
-				<div class="button-container">
-					<form action="${cp}/user/cart/update/${item.id}" method="post">
-						<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" /> <input type="number" name="quantity"
-							value="${item.quantity}" /> <br>
-						<br>
-						<button type="submit" class="btn-update">Update</button>
-					</form>
-					<form action="${cp}/user/cart/delete/${item.id}" method="post">
-						<input type="hidden" name="cartId" value="${item.id}">
-						<button type="submit" class="remove-btn"
-							onclick="return confirm('Are you sure you want to remove this item?')">Delete</button>
-					</form>
-				</div>
-			</div>
-			<c:set var="itemTotal" value="${item.product.price * item.quantity}" />
-			<c:set var="totalPrice" value="${totalPrice + itemTotal}" />
-		</c:forEach>
+    <!-- No cart found -->
+    <c:if test="${not empty noCartFound}">
+      <div class="empty-state">
+        <div class="empty-icon">❓</div>
+        <h3>${noCartFound}</h3>
+        <a href="${cp}/user/product/allproducts/${user.id}" class="btn btn-primary mt-3">Browse Products</a>
+      </div>
+    </c:if>
 
-		<div class="cart-total">
-			<h4>Total: Rs ${totalPrice}</h4>
-		</div>
+    <!-- Cart Items -->
+    <c:if test="${not empty cartItems && cartItems.size() > 0}">
+      <div class="cart-items">
+        <c:set var="totalPrice" value="0" />
+        <c:forEach items="${cartItems}" var="item">
+          <div class="cart-item">
+            <img src="${cp}/product_image/${item.product.imageName}" alt="${item.product.name}" class="item-image">
+            <div class="item-details">
+              <h3 class="item-name">${item.product.name}</h3>
+              <span class="item-category">${item.product.category}</span>
+              <span class="item-price">Rs ${item.product.price}</span>
+              <span class="item-stock">${item.product.quantity} available</span>
+              <c:if test="${not empty QuantityExceed}">
+                <div class="alert alert-warning mt-2 p-2">${QuantityExceed}</div>
+              </c:if>
+            </div>
+            <div class="item-actions">
+              <form action="${cp}/user/cart/update/${item.id}" method="post" class="quantity-control">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                <button type="button" class="quantity-btn minus"
+                 onclick="this.parentNode.querySelector('input[type=number]').stepDown()">−</button>
+                <input type="number" name="quantity" value="${item.quantity}" min="1" 
+                max="${item.product.quantity}" class="quantity-input">
+                <button type="button" class="quantity-btn plus" 
+                onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
+                <button type="submit" class="btn-danger">Update Cart</button>
+              </form>
+              <form action="${cp}/user/cart/delete/${item.id}" method="post">
+                <input type="hidden" name="cartId" value="${item.id}">
+                <button type="submit" class="remove-btn" onclick="return confirm('Remove this item?')">Remove</button>
+              </form>
+            </div>
+          </div>
+          <c:set var="itemTotal" value="${item.product.price * item.quantity}" />
+          <c:set var="totalPrice" value="${totalPrice + itemTotal}" />
+        </c:forEach>
+      </div>
 
-		<div class="button-wrapper">
-			<a href="${cp}/myorders/${user.id}" class="show-ordered-btn">Show
-				My Ordered Products</a>
+      <!-- Order Summary -->
+      <div class="summary-card">
+        <h3 class="summary-title">Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>Rs ${totalPrice}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span> 
+          <span>Rs:100</span>
+        </div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span>Rs ${totalPrice+100}</span>
+        </div>
+      </div>
 
-			<form
-				action="${pageContext.request.contextPath}/user/cart/deleteAll/${user.id}"
-				method="post">
-				<button type="submit" class="delete-all-btn"
-					onclick="return confirm('Are you sure you want to remove all items?')">Delete
-					All Carts</button>
-			</form>
-		</div>
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="${cp}/products" class="action-btn btn-outline">← Continue Shopping</a>
+        <form action="${cp}/user/cart/deleteAll/${user.id}" method="post" style="flex: 1;">
+          <button type="submit" class="action-btn btn-outline" onclick="return confirm('Clear your entire cart?')">Clear Cart</button>
+        </form>
+        <a href="${cp}/myorders" class="action-btn btn-outline">View Orders →</a>
+      </div>
 
-		<div class="form-container">
-			<div class="form-header">Payment Options</div>
-			<div class="d-flex justify-content-around">
-				<a href="${cp}/user/payment/success/cod"> <img
-					src="/images/cod_logo.png" alt="Cash on Delivery">
-				</a> <a href="${cp}/user/payment/esewa/${user.id}"> <img
-					src="/images/esewa_logo.png" alt="eSewa Payment">
-				</a> <a href="${cp}/user/khalti/${user.id}"> <img
-					src="/images/khalti_logo.png" alt="Khalti Payment">
-				</a>
-			</div>
-		</div>
-	</div>
+      <!-- Payment Options -->
+      <div class="payment-options">
+        <h3 class="payment-title">Payment Method</h3>
+        <div class="payment-methods">
+          <a href="${cp}/user/payment/success/cod" class="payment-method">
+            <img src="/images/cod_logo.png" alt="Cash on Delivery" class="payment-logo">
+            <span class="payment-name">Cash on Delivery</span>
+          </a>
+          <a href="${cp}/user/payment/esewa/${user.id}" class="payment-method">
+            <img src="/images/esewa_logo.png" alt="eSewa" class="payment-logo">
+            <span class="payment-name">eSewa</span>
+          </a>
+          <a href="${cp}/user/khalti/${user.id}" class="payment-method">
+            <img src="/images/khalti_logo.png" alt="Khalti" class="payment-logo">
+            <span class="payment-name">Khalti</span>
+          </a>
+        </div>
+      </div>
+    </c:if>
+  </div>
+<%@ include file="../user/footer.jsp" %>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

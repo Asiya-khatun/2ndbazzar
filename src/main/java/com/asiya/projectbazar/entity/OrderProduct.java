@@ -40,9 +40,6 @@ public class OrderProduct  implements Serializable{
 		Approved,Pending,Declined
 	}
 	
-	
-
-	 
 	@Column(name="date")
 	private LocalDate order_date;
 	

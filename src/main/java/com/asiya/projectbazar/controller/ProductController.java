@@ -2,41 +2,45 @@ package com.asiya.projectbazar.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.web.exchanges.HttpExchange.Principal;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer.RedirectionEndpointConfig;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.asiya.projectbazar.entity.Cart;
-
 import com.asiya.projectbazar.entity.Product;
 import com.asiya.projectbazar.entity.User;
+import com.asiya.projectbazar.enums.CategoryEnum;
 import com.asiya.projectbazar.service.CartService;
-import com.asiya.projectbazar.service.CategoryService;
 import com.asiya.projectbazar.service.FUploadService;
 import com.asiya.projectbazar.service.OrderService;
 import com.asiya.projectbazar.service.ProductService;
 import com.asiya.projectbazar.service.UserService;
+import com.asiya.projectbazar.validation.ProductValidator;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/user/product")
 public class ProductController {
-	@Autowired
-	private CategoryService categoryService;
+	
 
 	@Autowired
 	private FUploadService fuploadService;
@@ -50,51 +54,63 @@ public class ProductController {
 	private OrderService orderService;
 	@Autowired
 	private CartService cartService;
-
+@Autowired
+private ProductValidator productValidator;
 
 	@GetMapping("/add")
 	public String showAddProductPage(Principal principal, Model model) {
 		// Ensure the user is authenticated
 		String username = principal.getName(); //
-		model.addAttribute("cat_list", categoryService.getAllCategories());
+		model.addAttribute("cat_list", CategoryEnum.values());
 		model.addAttribute("user", username);
 		model.addAttribute("product", new Product()); //
-		return "product/product"; //
+		return "product/AddProduct"; //
 	}
+	
+@InitBinder("product")
+protected void initBinder(WebDataBinder binder) {
+	binder.addValidators(productValidator);
+}
+	
+@PreAuthorize("hasRole('ROLE_USER')")
+@PostMapping("/add")
+public ModelAndView saveProduct(@Valid @ModelAttribute Product product,
+                                BindingResult result,
+                                RedirectAttributes redirectAttributes) {
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@PostMapping("/add")
-	public String saveProduct(@ModelAttribute Product product,RedirectAttributes redirectAttributes) {
-		// make sure that the auntheticated user is logged in
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String username = authentication.getName();
+    if (result.hasErrors()) {
+        ModelAndView mav = new ModelAndView("product/AddProduct");
+        mav.addObject("valid_errors", result.getAllErrors());
+        return mav;
+    }
 
-//fetching the user with the username
-		User user = userService.getUserByUsername(username);
-		if (user != null) {
-			product.setUser(user);
-		} else {
-			System.out.println("User not found.");
-			return "redirect:/user/product/add";
-		}
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+    User user = userService.getUserByUsername(username);
 
-		// Handling the image upload
-		if (product.getImageFile() != null && !product.getImageFile().isEmpty()) {
-			boolean isImageUploaded = fuploadService.uploadProductImage(product.getImageFile());
-			if (isImageUploaded) {
-				product.setImageName(product.getImageFile().getOriginalFilename());
-				product.setAddedDate(LocalDate.now());
-				productService.addProduct(product);
-				redirectAttributes.addFlashAttribute("success","Product Added");
-				// Save the product with the user_id
-			    return "redirect:/user/product/view/"+ user.getId();
-			} else {
-				System.out.println("Error uploading product image for: " + product);
-			}
-		}
+    if (user == null) {
+        return new ModelAndView("redirect:/user/product/add");
+    }
 
-		return "redirect:/user/product/add"; // Redirect if image upload or product creation fails
-	}
+    product.setUser(user);
+
+    if (product.getImageFile() != null && !product.getImageFile().isEmpty()) {
+        boolean isImageUploaded = fuploadService.uploadProductImage(product.getImageFile());
+        if (isImageUploaded) {
+            product.setImageName(product.getImageFile().getOriginalFilename());
+        } else {
+            System.out.println("Error uploading product image for: " + product);
+        }
+    }
+
+    product.setAddedDate(LocalDate.now());
+    productService.addProduct(product);
+    redirectAttributes.addFlashAttribute("success", "Product Added");
+
+    return new ModelAndView("redirect:/user/product/view/" + user.getId());
+}
+
+
 	
 //for the product editing
 	@GetMapping("/edit/{product_id}")
@@ -106,22 +122,23 @@ public class ProductController {
 //	model.addAttribute("product",product);
 		model.addAttribute("product_list", productService.getAllProducts());
 		model.addAttribute("edit_product", productService.getProductById(id));
-		model.addAttribute("cat_list", categoryService.getAllCategories());
-		return "product/product";
+		model.addAttribute("cat_list", CategoryEnum.values());
+		return "product/AddProduct";
 	}
 	
 	//updating the product
-	@PostMapping("/update")
-	public String updateProduct(@RequestParam("id") int id,
+	@PostMapping("/update/{id}")
+	public String updateProduct(
+	        @PathVariable("id") int id,
 	        @ModelAttribute Product product,
-	        @RequestParam(value = "pevImage", required = false) String pevImg, 
-	        @RequestParam(value = "imageFile", required = false) MultipartFile imageFile, 
+	        @RequestParam(value = "prevImage", required = false) String prevImage,
+	        @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
 	        Principal principal,
 	        Model model) {
 
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    if (authentication == null || !authentication.isAuthenticated()) {
-	        return "redirect:/login";  // Redirect to login if user is not authenticated
+	        return "redirect:/login";
 	    }
 
 	    String username = authentication.getName();
@@ -130,74 +147,66 @@ public class ProductController {
 	    Product existingProduct = productService.getProductById(id);
 	    if (existingProduct == null || !existingProduct.getUser().equals(user)) {
 	        model.addAttribute("error", "You are not authorized to update this product.");
-	        return "error/403"; 
+	        return "error/403";
 	    }
-
-	    // Update product details
 	    existingProduct.setName(product.getName());
 	    existingProduct.setDescription(product.getDescription());
 	    existingProduct.setPrice(product.getPrice());
 	    existingProduct.setQuantity(product.getQuantity());
 	    existingProduct.setCategory(product.getCategory());
-	    existingProduct.setAddedDate(product.getAddedDate());
-
-	    // Handle image upload
+	    existingProduct.setAddedDate((LocalDate.now()));   
 	    if (imageFile != null && !imageFile.isEmpty()) {
-	        String imageName = "product_image/" + imageFile.getOriginalFilename();
-	        if (fuploadService.uploadProductImage(imageFile)) {
-	            existingProduct.setImageName(imageName); // Save new image name
+	        String imageName =  imageFile.getOriginalFilename();
+	        boolean uploaded = fuploadService.uploadProductImage(imageFile);
+	        if (uploaded) {
+	            existingProduct.setImageName(imageName);
+	        } else {
+	            model.addAttribute("error", "Image upload failed.");
+	            return "user/update_form"; 
 	        }
 	    } else {
-	        existingProduct.setImageName(pevImg); // Keep previous image
+	        existingProduct.setImageName(prevImage);
 	    }
 
-	    // Save updated product
 	    productService.updateProduct(existingProduct);
 
-	    return "redirect:/user/product/view";
+	    return "redirect:/user/product/view/" + user.getId();
 	}
 
-
+	
 
 //listing the logged in user products or owner products
 	@GetMapping("/view/{id}")
 	public String showProduct(@PathVariable int id, Model m, Principal principal) {
 User user = userService.getUserById(id);
-
+ 
 		m.addAttribute("user", user);
 		
 		List<Product> products = productService.getProductByUserId(user.getId());
 		m.addAttribute("products", products);
-		
-//		List<OrderProduct> orders_list = orderService.getOrderbyUser(user);
-//		m.addAttribute("orders", orders_list);
-		return "product/productlist";
+		 boolean noProduct = products.isEmpty();
+		    m.addAttribute("noProduct", noProduct);
+		return "product/MyProducts";
 		
 	}
 
-
 	@PostMapping("/delete/{id}")
-	public String deleteProduct(@PathVariable int id,RedirectAttributes redirectAttributes) {
+	public String deleteProduct(@PathVariable int id, RedirectAttributes redirectAttributes) {
+	    System.out.println("Delete request received for product id: " + id);
 	    Product pro = productService.getProductById(id);
 	    if (pro != null) {
 	        productService.deleteProduct(pro);
-	        // Redirect to the product view page with a success message in query params
-	        redirectAttributes.addFlashAttribute("deleteSuccess","Deleted Successfully");
+	        redirectAttributes.addFlashAttribute("deleteSuccess", "Deleted Successfully");
 	        return "redirect:/user/product/view/" + pro.getUser().getId();
 	    } else {
-	        // Redirect to the homepage with a failed message in query params
-	    	redirectAttributes.addFlashAttribute("errordelete","Error deleting products");
-	        return "redirect:/user/product/view/" + pro.getUser().getId();
-
+	        redirectAttributes.addFlashAttribute("errordelete", "Error deleting products");
+	        return "redirect:/user/product/view";
 	    }
 	}
 
-
-	
 	//listing the other users products
 	@GetMapping("/allproducts/{id}")
 	public String getProducts(@PathVariable int id, Model m, Principal p) {
-	    // Get the user and products
 	    User user = userService.getUserById(id);
 	    m.addAttribute("user", user);
 	    System.out.println(user.getId() + " , " + user.getName());
@@ -205,35 +214,73 @@ User user = userService.getUserById(id);
 	    List<Product> products = productService.getAllProductExceptLoggedInUser(id);
 	    List<Cart> cartItems = cartService.getCartByUser(user);
 
-	    // Loop through each product to check if it's out of stock
 	    for (Product product : products) {
 	        int totalCartQuantity = 0;
 
-	        // Calculating the total quantity ordered for the current product in the cart
 	        for (Cart cart : cartItems) {
 	            if (cart.getProduct().getId() == product.getId()) {
-	            	totalCartQuantity += cart.getQuantity();
+	                totalCartQuantity += cart.getQuantity();
 	            }
 	        }
-
-	        // If the total quantity ordered equals the available quantity, mark it as out of stock
 	        if (product.getQuantity() <= totalCartQuantity) {
 	            product.setQuantity(0); // Set quantity to 0 (out of stock)
 	            System.out.println("Product with ID " + product.getId() + " is now out of stock.");
 	        } else {
-	            // Otherwise, update the quantity to show remaining stock
 	            product.setQuantity(product.getQuantity() - totalCartQuantity);
 	        }
 	    }
+	    
+	    m.addAttribute("categories", CategoryEnum.values()); 
 
-	    // Add both products and cart items to the model
 	    m.addAttribute("products", products);
 	    m.addAttribute("cartItems", cartItems);
 
-	    return "user/products"; // Your view template
+	    return "user/AllProducts"; 
 	}
+	
+	
+	  @GetMapping("/filters/{id}")
+	  public String getAllProducts(Model model,@PathVariable int id) {
+	      User user = userService.getUserById(id); 
+	      model.addAttribute("user", user);        
 
+		    model.addAttribute("categories", CategoryEnum.values());  
+		    return "user/AllProducts";
+		}
 
+	  @PostMapping("/filter/{id}")
+	  public String filterByCategory(@RequestParam("categoryEnum") Optional<CategoryEnum> categoryEnum,
+	                                 Model model,
+	                                 Principal p,
+	                                 @PathVariable int id) {
 
+	      User user = userService.getUserById(id); 
+	      model.addAttribute("user", user);        
+
+	      model.addAttribute("categories", CategoryEnum.values());
+
+	      List<Product> products;
+
+	      if (categoryEnum.isPresent()) {
+	          products = productService.getByCategories(categoryEnum.get(), id);
+	      } else {
+	          products = productService.getAllProductExceptLoggedInUser(id);
+	      }
+
+	      model.addAttribute("products", products);
+
+	      if (products.isEmpty()) {
+	          model.addAttribute("message", "No products found for selected category.");
+	      }
+
+	      return "user/AllProducts";
+	  }
+
+@GetMapping("/details/{id}")
+public String productDetails(@PathVariable int id,Model m) {
+	Product product=productService.getProductById(id);
+	m.addAttribute("product",product);
+	return"product/productDetails";
+}
 
 }

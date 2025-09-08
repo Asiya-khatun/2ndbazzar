@@ -61,7 +61,7 @@
             width: 150px;
         }
     </style>
-    <%@ include file="../userhome.jsp" %>
+    <%@ include file="navbar.jsp" %>
 </head>
 <body>
     <div class="container">

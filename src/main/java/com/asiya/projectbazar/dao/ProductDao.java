@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.asiya.projectbazar.entity.Product;
+import com.asiya.projectbazar.enums.CategoryEnum;
+
 @Repository
 public interface ProductDao extends JpaRepository<Product,Integer>
 {
@@ -16,4 +18,7 @@ public interface ProductDao extends JpaRepository<Product,Integer>
     
     @Query("SELECT p FROM Product p WHERE p.user.id != :loggedInUserId")
     List<Product> findAllExceptLoggedInUser(@Param("loggedInUserId") int userID);
+    
+    List<Product> findByCategoryAndUserIdNot(CategoryEnum category, int userId);
+
 }

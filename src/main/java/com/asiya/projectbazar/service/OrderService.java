@@ -2,6 +2,7 @@ package com.asiya.projectbazar.service;
 
 import java.util.List;
 
+import com.asiya.projectbazar.algorithms.OrderHistory;
 import com.asiya.projectbazar.entity.OrderProduct;
 import com.asiya.projectbazar.entity.OrderedProducts;
 import com.asiya.projectbazar.entity.Product;
@@ -22,6 +23,6 @@ public interface OrderService {
 
 
 //	public void deleteOrderByUserId(OrderProduct orderProduct);
-	
+	public List<OrderHistory> getUserOrderProducts(User user);
 
 }

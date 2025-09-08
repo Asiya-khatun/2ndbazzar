@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.asiya.projectbazar.entity.User;
+import com.asiya.projectbazar.entity.UserRole;
 
 public interface UserService {
 	public void saveUser(User user);
@@ -16,9 +17,7 @@ public interface UserService {
 	public void deleteUser(User user);
 	List<User> getAllUser();
 	public void changePassword(String Username, String password, String NewPassoword);
-//	public List<User>getAllExceptLoggedIn(Long loggedInUserId);
-//	public List<User> getPendingUsers();
-//	public void approveUser(Long id);
-//	public void declineUser(Long id);
+	public List<User> getByUserRole(String role);
+
 
 }
